@@ -1,0 +1,51 @@
+class FixedLengthStringArray:
+    def __init__(self, n, l, values=None):
+        self.n = n
+        self.l = l
+        self.array = ["" for i in range(n)]
+        if values:
+            for i in range(n):
+                self.array[i] = values[i]
+    
+    def __getitem__(self, index):
+        if index < 0 or index >= self.n:
+            raise IndexError
+        return self.array[index]
+    
+    def __setitem__(self, index, value):
+        if index < 0 or index >= self.n:
+            raise IndexError
+        self.array[index] = value[:self.l]
+    
+    def __str__(self):
+        return " ".join(self.array)
+    
+    def concat(self, other_array):
+        if len(self) != len(other_array):
+            raise ValueError("Arrays should have same length")
+        result = [self[i] + other_array[i] for i in range(self.n)]
+        return FixedLengthStringArray(self.n, self.l, result)
+    
+    def merge(self, other_array):
+        if len(self) != len(other_array):
+            raise ValueError("Arrays should have same length")
+        seen = set()
+        result = []
+        for i in range(self.n):
+            element = self[i] + other_array[i]
+            if element not in seen:
+                result.append(element)
+                seen.add(element)
+        return FixedLengthStringArray(len(result), self.l, result)
+    
+    def print_element(self, index):
+        if index < 0 or index >= self.n:
+            raise IndexError
+        print(self.array[index])
+    
+    def print_array(self):
+        for element in self.array:
+            print(element)
+    
+    def __len__(self):
+        return self.n
